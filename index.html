@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applicant Form</title>
+</head>
+<body>
+
+    <h1>Applicant Form</h1>
+
+    <form action="#" method="post" enctype="multipart/form-data">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}"><br><br>
+        
+        <label for="photo">Passport Size Photo:</label>
+        <input type="file" id="photo" name="photo" accept="image/*" required><br><br>
+        
+        <label for="preference">What do you want in a partner?</label><br>
+        <input type="radio" id="money1" name="preference" value="money">
+        <label for="money1">Money</label><br>
+        
+        <input type="radio" id="money2" name="preference" value="money">
+        <label for="money2">Money</label><br>
+        
+        <input type="radio" id="money3" name="preference" value="money">
+        <label for="money3">Money</label><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+</body>
+</html>
