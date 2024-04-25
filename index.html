@@ -19,36 +19,33 @@
     firebase.initializeApp(firebaseConfig);
 
     const db = firebase.firestore();
-        function submitForm() {
-            // Get form data
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const reason = document.getElementById('reason').value;
+    
+    function submitForm() {
+        // Get form data
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const reason = document.getElementById('reason').value;
 
-            // Add data to Firestore
-            db.collection("applications").add({
-                name: name,
-                phone: phone,
-                reason: reason
-            })
-            .then((docRef) => {
-                console.log("Document written with ID: ", docRef.id);
-                alert("Form submitted successfully!");
-                // Reset form fields
-                document.getElementById('name').value = '';
-                document.getElementById('phone').value = '';
-                document.getElementById('reason').value = '';
-            })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-                alert("An error occurred. Please try again later.");
-            });
-        }
-        <form onsubmit="submitForm(); return false;">
-
+        // Add data to Firestore
+        db.collection("applications").add({
+            name: name,
+            phone: phone,
+            reason: reason
+        })
+        .then((docRef) => {
+            console.log("Document written with ID: ", docRef.id);
+            alert("Form submitted successfully!");
+            // Reset form fields
+            document.getElementById('name').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('reason').value = '';
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+            alert("An error occurred. Please try again later.");
+        });
+    }
     </script>
-</script>
-
 
     <style>
         .center {
@@ -77,7 +74,7 @@
 
     <div class="gap"></div> <!-- Add gap here -->
 
-    <form action="#" method="post" enctype="multipart/form-data">
+    <form onsubmit="submitForm(); return false;">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required><br><br>
         
@@ -95,5 +92,3 @@
 
 </body>
 </html>
-
-
