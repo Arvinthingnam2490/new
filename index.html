@@ -53,7 +53,7 @@
             margin-left: auto;
             margin-right: auto;
         }
-        .applicant detail {
+        .applicant {
             text-align: center;
             font-weight: bold;
         }
@@ -64,31 +64,27 @@
 </head>
 <body>
 
-    <h1>Applicant Form</h1>
-
-    <p><strong>About Sama:</strong> Sama is a man who has been doing nothing but sleeping for almost a decade. He has been single and is now trying to find a mate.</p>
-
-    <img src="images/WhatsApp Image 2024-01-24 at 10.34.48 AM.jpeg" alt="WhatsApp Image 2024-01-24 at 10.34.48 AM.jpeg" class="center" style="width: 200px; height: auto;">
-
-    <p class="applicant detail">Applicant Detail</p>
-
-    <div class="gap"></div> <!-- Add gap here -->
+    <h1 class="center">Applicant Form</h1>
 
     <form onsubmit="submitForm(); return false;">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
-        
-        <label for="phone">Phone Number:</label>
-        <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}"><br><br>
-        
-        <label for="photo">Passport Size Photo:</label>
-        <input type="file" id="photo" name="photo" accept="image/*" required><br><br>
-        
-        <label for="reason">Why do you want to go on a date with Sama?</label><br>
-        <textarea id="reason" name="reason" rows="4" cols="50" required></textarea><br><br>
+        <div class="applicant">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required class="gap"><br>
+            
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" class="gap"><br>
+            
+            <label for="reason">Why do you want to go on a date with Sama?</label><br>
+            <textarea id="reason" name="reason" rows="4" cols="50" required class="gap"></textarea><br>
 
-        <input type="submit" value="Submit">
+            <label for="photo">Upload a photo:</label>
+            <input type="file" id="photo" name="photo" accept="image/*" required class="gap"><br>
+
+            <button type="submit">Submit</button>
+        </div>
     </form>
 
 </body>
 </html>
+
+    
