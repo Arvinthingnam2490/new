@@ -6,31 +6,44 @@
     <title>Applicant Form</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-storage.js"></script>
     <script>
     // Initialize Firebase
-    const firebaseConfig = {
-        apiKey: "AIzaSyDJ0r1OjKxe-jYKSY4hwxztKLNn-I7UNDU",
-        authDomain: "sama-a3af0.firebaseapp.com",
-        projectId: "sama-a3af0",
-        storageBucket: "sama-a3af0.appspot.com",
-        messagingSenderId: "515658908639",
-        appId: "1:515658908639:web:7ac55c35d6afe63049ba6a"
-    };
+   const firebaseConfig = {
+      apiKey: "AIzaSyDJ0r1OjKxe-jYKSY4hwxztKLNn-I7UNDU",
+      authDomain: "sama-a3af0.firebaseapp.com",
+      projectId: "sama-a3af0",
+      storageBucket: "sama-a3af0.appspot.com",
+      messagingSenderId: "515658908639",
+      appId: "1:515658908639:web:7ac55c35d6afe63049ba6a"
+   };
     firebase.initializeApp(firebaseConfig);
 
     const db = firebase.firestore();
-        function submitForm() {
-            console.log("Form submission initiated");
-            // Get form data
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const reason = document.getElementById('reason').value;
+    const storage = firebase.storage();
 
-            // Add data to Firestore
-            db.collection("applications").add({
-                name: name,
-                phone: phone,
-                reason: reason
+    function submitForm() {
+        console.log("Form submission initiated");
+        // Get form data
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const reason = document.getElementById('reason').value;
+        const photo = document.getElementById('photo').files[0]; // Get the file object
+
+        // Upload photo to Firebase Storage
+        const storageRef = storage.ref(`photos/${photo.name}`);
+        storageRef.put(photo)
+            .then((snapshot) => {
+                return snapshot.ref.getDownloadURL();
+            })
+            .then((downloadURL) => {
+                // Add data to Firestore
+                return db.collection("applications").add({
+                    name: name,
+                    phone: phone,
+                    reason: reason,
+                    photoURL: downloadURL // Store the download URL of the uploaded image
+                });
             })
             .then((docRef) => {
                 console.log("Document written with ID: ", docRef.id);
@@ -39,17 +52,14 @@
                 document.getElementById('name').value = '';
                 document.getElementById('phone').value = '';
                 document.getElementById('reason').value = '';
+                document.getElementById('photo').value = '';
             })
             .catch((error) => {
                 console.error("Error adding document: ", error);
                 alert("An error occurred. Please try again later.");
             });
-        }
-        <form onsubmit="submitForm(); return false;">
-
+    }
     </script>
-</script>
-
 
     <style>
         .center {
@@ -57,7 +67,7 @@
             margin-left: auto;
             margin-right: auto;
         }
-        .applicant detail {
+        .applicant-detail {
             text-align: center;
             font-weight: bold;
         }
@@ -74,11 +84,11 @@
 
     <img src="images/WhatsApp Image 2024-01-24 at 10.34.48 AM.jpeg" alt="WhatsApp Image 2024-01-24 at 10.34.48 AM.jpeg" class="center" style="width: 200px; height: auto;">
 
-    <p class="applicant detail">Applicant Detail</p>
+    <p class="applicant-detail">Applicant Detail</p>
 
     <div class="gap"></div> <!-- Add gap here -->
 
-    <form action="#" method="post" enctype="multipart/form-data">
+    <form onsubmit="submitForm(); return false;">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required><br><br>
         
@@ -96,3 +106,6 @@
 
 </body>
 </html>
+
+   
+     
