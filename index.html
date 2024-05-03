@@ -5,59 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Applicant Form</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-database.js"></script>
     <script>
-    // Initialize Firebase
-   const firebaseConfig = {
-      apiKey: "AIzaSyDJ0r1OjKxe-jYKSY4hwxztKLNn-I7UNDU",
-      authDomain: "sama-a3af0.firebaseapp.com",
-      projectId: "sama-a3af0",
-      storageBucket: "gs://sama-a3af0.appspot.com",
-      messagingSenderId: "515658908639",
-      appId: "1:515658908639:web:7ac55c35d6afe63049ba6a"
+    // Initialize Firebase with Realtime Database
+    const firebaseConfig = {
+       apiKey: "AIzaSyDJ0r1OjKxe-jYKSY4hwxztKLNn-I7UNDU",
+       authDomain: "sama-a3af0.firebaseapp.com",
+       databaseURL: "https://sama-a3af0-default-rtdb.firebaseio.com",
+       projectId: "sama-a3af0",
+       storageBucket: "sama-a3af0.appspot.com",
+       messagingSenderId: "515658908639",
+       appId: "1:515658908639:web:7ac55c35d6afe63049ba6a"
    };
     firebase.initializeApp(firebaseConfig);
 
-    const db = firebase.firestore();
-    const storage = firebase.storage();
+    const db = firebase.database(); // Get a reference to the Realtime Database
 
     function submitForm() {
         console.log("Form submission initiated");
-        // Get form data
+
         const name = document.getElementById('name').value;
         const phone = document.getElementById('phone').value;
         const reason = document.getElementById('reason').value;
-        const photo = document.getElementById('photo').files[0]; // Get the file object
+        // const photo = document.getElementById('photo').files[0]; // File upload not supported in Realtime Database
 
-        // Upload photo to Firebase Storage
-        const storageRef = storage.ref(`photos/${photo.name}`);
-        storageRef.put(photo)
-            .then((snapshot) => {
-                return snapshot.ref.getDownloadURL();
-            })
-            .then((downloadURL) => {
-                // Add data to Firestore
-                return db.collection("applications").add({
-                    name: name,
-                    phone: phone,
-                    reason: reason,
-                    photoURL: downloadURL // Store the download URL of the uploaded image
-                });
-            })
-            .then((docRef) => {
-                console.log("Document written with ID: ", docRef.id);
-                alert("Form submitted successfully!");
-                // Reset form fields
-                document.getElementById('name').value = '';
-                document.getElementById('phone').value = '';
-                document.getElementById('reason').value = '';
-                document.getElementById('photo').value = '';
-            })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-                alert("An error occurred. Please try again later.");
-            });
+        // Push data to the Realtime Database
+        const newApplicationRef = db.ref("applications").push(); // Create a new reference under "applications"
+        newApplicationRef.set({
+            name: name,
+            phone: phone,
+            reason: reason
+        })
+        .then(() => {
+            console.log("Data stored successfully in Realtime Database");
+            alert("Form submitted successfully!");
+            // Reset form fields
+            document.getElementById('name').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('reason').value = '';
+        })
+        .catch((error) => {
+            console.error("Error storing data in Realtime Database: ", error);
+            alert("An error occurred. Please try again later.");
+        });
     }
     </script>
 
@@ -95,8 +85,9 @@
         <label for="phone">Phone Number:</label>
         <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}"><br><br>
         
-        <label for="photo">Passport Size Photo:</label>
-        <input type="file" id="photo" name="photo" accept="image/*" required><br><br>
+        <!-- File upload not supported in Realtime Database -->
+        <!-- <label for="photo">Passport Size Photo:</label>
+        <input type="file" id="photo" name="photo" accept="image/*" required><br><br> -->
         
         <label for="reason">Why do you want to go on a date with Sama?</label><br>
         <textarea id="reason" name="reason" rows="4" cols="50" required></textarea><br><br>
@@ -107,5 +98,4 @@
 </body>
 </html>
 
-   
      
